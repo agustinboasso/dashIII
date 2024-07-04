@@ -1,5 +1,6 @@
 // src/components/IncidentList.js
-import React from 'react';
+import React, { useState } from 'react';
+import Modal from '../Modal/Modal';
 
 const incidents = [
   {
@@ -28,6 +29,19 @@ const incidents = [
 ];
 
 const Incidents = () => {
+  const [selectedIncident, setSelectedIncident] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleRowClick = (incident) => {
+    setSelectedIncident(incident);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedIncident(null);
+  };
+
   return (
     <div className="p-6 bg-gray-100">
       <div className="mb-4">
@@ -52,7 +66,7 @@ const Incidents = () => {
           </thead>
           <tbody>
             {incidents.map((incident, index) => (
-              <tr key={index} className="hover:bg-gray-100">
+              <tr key={index} className="hover:bg-gray-100 cursor-pointer" onClick={() => handleRowClick(incident)}>
                 <td className="py-2 px-4 border-b">{incident.tecnico}</td>
                 <td className="py-2 px-4 border-b">{incident.codigo}</td>
                 <td className="py-2 px-4 border-b">{incident.creado}</td>
@@ -71,6 +85,7 @@ const Incidents = () => {
           </tbody>
         </table>
       </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal} incident={selectedIncident} />
     </div>
   );
 };
